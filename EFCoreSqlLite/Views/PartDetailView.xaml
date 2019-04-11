@@ -1,0 +1,162 @@
+﻿<UserControl x:Class="Mosiac.Views.PartDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Mosiac.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="850">
+            <UserControl.Resources>
+        
+            </UserControl.Resources>
+  
+            <Grid Margin="6" Background="WhiteSmoke">
+                <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="275"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="130"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBlock Margin="2,10,2,9" VerticalAlignment="Center" Height="16">Item Description</TextBlock>
+        <TextBox  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding DetailPart.ItemDescription,Mode=TwoWay}" VerticalAlignment="Center" Margin="6,9,0,8" Height="18"/>
+        <StackPanel  Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+            <Button   Margin="6"   Content="New"  Width="75"  VerticalAlignment="Center"/>
+            <Button  Margin="6" Content="Add to Cart"  Width="75"  VerticalAlignment="Center"/>
+            <Button  Margin="6"  Content="Delete"  Width="75"  VerticalAlignment="Center"/>
+        </StackPanel>
+        <!--Label Block 1-->
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="6,10,6,6">
+            <TextBlock Margin="2">Cutlist Name</TextBlock>
+            <TextBlock Margin="2">PartNum</TextBlock>
+            <TextBlock Margin="2">Manufacturer</TextBlock>
+            <TextBlock Margin="2">Manufacturer Part</TextBlock>
+        </StackPanel>
+        <!--Input Block 1-->
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="6,10,6,10">
+            <TextBox Margin="1" Text="{Binding DetailPart.ItemName}"/>
+            <TextBox Margin="1" Text="{Binding DetailPart.PartNum}"/>
+            <!--Manufacturer-->
+            <StackPanel Orientation="Horizontal">
+                <ComboBox  ItemsSource="{Binding ManusList,Mode=TwoWay}"
+               DisplayMemberPath="DisplayMember"
+               SelectedValuePath="Id"
+               SelectedValue="{Binding DetailPart.ManuID,Mode=TwoWay}"
+                 Width="190" Height="20" Padding="6,3,5,3" Margin="2,0,0,0"
+               />
+                <Button Content="New"  Margin="7,0,0,0"   Width="63" BorderThickness="1" HorizontalAlignment="Right" />
+
+            </StackPanel>
+            <TextBox Margin="1" Text="{Binding DetailPart.ManuPartNum}"/>
+        </StackPanel>
+        <!--Label Block 2-->
+        <StackPanel Grid.Row="1" Grid.Column="2"/>
+        <!--Input Block 2-->
+        <GroupBox Header="Cut-List"
+                  Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="6,0,6,25">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="50">Weight</Label>
+                    <TextBox Margin="1,2"  Width="80" Height="20"  Text="{Binding DetailPart.Weight,StringFormat=N2}"/>
+                    <Label Width="50">Waste</Label>
+                    <TextBox Margin="1,2"  Width="80" Height="20"  Text="{Binding DetailPart.Waste,StringFormat=N2}"/>
+                    <Label Width="50">Markup</Label>
+                    <TextBox Margin="1,2"  Width="80" Height="20" Text="{Binding DetailPart.MarkUp,StringFormat=N2}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="50">Cost</Label>
+                    <TextBox Margin="1,2"  Width="80" Height="20" Text="{Binding DetailPart.Cost,StringFormat=C}"/>
+                    <Label Width="50">SKU</Label>
+                    <TextBox Margin="1,2" Width="212" Height="20"  Text="{Binding DetailPart.SKU}"/>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Units" Margin="6,2,19,2"></TextBlock>
+                    <ComboBox ItemsSource="{Binding UnitsOfMeasureList}"
+               DisplayMemberPath="DisplayMember"
+               SelectedValuePath="Id"
+               SelectedValue="{Binding DetailPart.UID,Mode=TwoWay}"
+                      Width="78" 
+                          Height="20"
+                          HorizontalAlignment="Left"
+               />
+
+                </StackPanel>
+
+            </StackPanel>
+        </GroupBox>
+        <StackPanel  Grid.Row="4" Grid.Column="3"  Orientation="Horizontal" HorizontalAlignment="Right" Width="176">
+            <Button Content="Cancel"  
+                VerticalAlignment="Center" Width="76" Margin="6"/>
+            <Button Content="Save" 
+                VerticalAlignment="Center" Width="76" Margin="6" Command="{Binding SaveCommand}"/>
+        </StackPanel>
+        <TabControl Grid.Column="0" Grid.Row="2"  Grid.ColumnSpan="4"  Margin="6,6,6,0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TabItem Header="Resources">
+                <Grid Background="#FFE5E5E5" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button  Content="New" Width="90" Height="30" Margin="6,0,3,0"/>
+                        <Button  Content="Edit" Width="90" Height="30" Margin="6,0,3,0"/>
+                        <Button  Content="Attach" Width="90" Height="30" Margin="6,0,3,0"/>
+                        <Button  Content="Detach" Width="90" Height="30" Margin="6,0,3,0"/>
+                    </StackPanel>
+                    <DataGrid Grid.Row="1" VerticalAlignment="Top" ItemsSource="{Binding PartResources}" 
+                              AutoGenerateColumns="false" SelectedValuePath="DocID" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="DocID" Binding="{Binding DocID}" Width="90" />
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="450" />
+                            <DataGridTextColumn Header="Ext" Binding="{Binding DocumentPath}" Width="60" />
+                            <DataGridTextColumn Header="View" Binding="{Binding DocumentView}" Width="100" />
+                            <DataGridTemplateColumn >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl},Mode=FindAncestor},
+                                            Path=DataContext.OpenResource}" CommandParameter="{Binding}"  Content="Open" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="Purchase Orders">
+                <DataGrid ItemsSource="{Binding PartOrders}" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="OrderNum" Binding="{Binding PurchaseOrderID}" Width="80" />
+                        <DataGridTextColumn Header="Order Date" Binding="{Binding OrderDate}" Width="90"  />
+                        <DataGridTextColumn Header="Job Name" Binding="{Binding JobName}" Width="220" />
+                        <DataGridTextColumn Header="Total" Binding="{Binding OrderTotal,StringFormat='{}{0:c}'}" Width="90" />
+                        <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="160" />
+                        <DataGridTextColumn Header="Purchaser" Binding="{Binding Purchaser}" Width="120" />
+                        <DataGridCheckBoxColumn Header="Received" Binding="{Binding Received}" Width="120" />
+                        <DataGridTemplateColumn >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl},Mode=FindAncestor},
+                                            Path=DataContext.OpenOrder}" CommandParameter="{Binding}"  Content="Open" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Inventory Transactions">
+                <DataGrid ItemsSource="{Binding  PartTransactions}">
+
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</UserControl>
