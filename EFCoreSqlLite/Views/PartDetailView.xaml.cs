@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mosiac.Services;
 using Mosiac.ViewModels;
 using System.Windows.Controls;
+using MahApps.Metro.Controls;
 
 namespace Mosiac.Views
 {

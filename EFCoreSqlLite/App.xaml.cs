@@ -28,6 +28,9 @@ namespace Mosiac
             mainWindow.Show();
         }
 
-       
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            
+        }
     }
 }

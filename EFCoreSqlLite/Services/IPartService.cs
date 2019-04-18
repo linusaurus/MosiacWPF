@@ -9,6 +9,7 @@ namespace Mosiac.Services
     {
         void Add(Part obj);
         void Delete(int partID);
+        void AddPartResources(Document doc);
         Task<IList<Part>> GetAllAsync();
         Task<Part> GetPart(int partID);
         Task<IList<Part>> Search(string term);

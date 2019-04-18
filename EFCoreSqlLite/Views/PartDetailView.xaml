@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:local="clr-namespace:Mosiac.Views"
+             xmlns:c="clr-namespace:Mosiac.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="850">
             <UserControl.Resources>
-        
+      
             </UserControl.Resources>
   
             <Grid Margin="6" Background="WhiteSmoke">
@@ -17,7 +19,7 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
+     
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
             <RowDefinition Height="130"/>
@@ -84,11 +86,8 @@
                SelectedValue="{Binding DetailPart.UID,Mode=TwoWay}"
                       Width="78" 
                           Height="20"
-                          HorizontalAlignment="Left"
-               />
-
+                          HorizontalAlignment="Left" />
                 </StackPanel>
-
             </StackPanel>
         </GroupBox>
         <StackPanel  Grid.Row="4" Grid.Column="3"  Orientation="Horizontal" HorizontalAlignment="Right" Width="176">
@@ -98,20 +97,24 @@
                 VerticalAlignment="Center" Width="76" Margin="6" Command="{Binding SaveCommand}"/>
         </StackPanel>
         <TabControl Grid.Column="0" Grid.Row="2"  Grid.ColumnSpan="4"  Margin="6,6,6,0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TabItem Header="Resources">
+            <!-- Resources-->
+            <TabItem Header="Resources" >
                 <Grid Background="#FFE5E5E5" >
+                    <Grid.Resources>
+                    </Grid.Resources>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="45"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal">
-                        <Button  Content="New" Width="90" Height="30" Margin="6,0,3,0"/>
-                        <Button  Content="Edit" Width="90" Height="30" Margin="6,0,3,0"/>
-                        <Button  Content="Attach" Width="90" Height="30" Margin="6,0,3,0"/>
-                        <Button  Content="Detach" Width="90" Height="30" Margin="6,0,3,0"/>
+                        <!--Resource Management Command Cluster-->
+                        <Button  Content="New" Width="90" Height="30" Margin="6,0,3,0"  Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl},Mode=FindAncestor},
+                                            Path=DataContext.NewResource}" CommandParameter="{Binding}"/>
+               
+                        <!--Resource Managerment Command Cluster-->
                     </StackPanel>
-                    <DataGrid Grid.Row="1" VerticalAlignment="Top" ItemsSource="{Binding PartResources}" 
-                              AutoGenerateColumns="false" SelectedValuePath="DocID" CanUserAddRows="False">
+                    <DataGrid Grid.Row="1" VerticalAlignment="Top" ItemsSource="{Binding PartResources}"  
+                              AutoGenerateColumns="false"  CanUserAddRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="DocID" Binding="{Binding DocID}" Width="90" />
                             <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="450" />
@@ -125,13 +128,29 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTemplateColumn >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl},Mode=FindAncestor},
+                                            Path=DataContext.EditResource}" CommandParameter="{Binding}"  Content="New" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl},Mode=FindAncestor},
+                                            Path=DataContext.DetachResource}" CommandParameter="{Binding}"  Content="New" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-
             </TabItem>
+
             <TabItem Header="Purchase Orders">
-                <DataGrid ItemsSource="{Binding PartOrders}" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid ItemsSource="{Binding PartOrders}"  AutoGenerateColumns="False" CanUserAddRows="False" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="OrderNum" Binding="{Binding PurchaseOrderID}" Width="80" />
                         <DataGridTextColumn Header="Order Date" Binding="{Binding OrderDate}" Width="90"  />
@@ -152,9 +171,16 @@
                 </DataGrid>
             </TabItem>
             <TabItem Header="Inventory Transactions">
-                <DataGrid ItemsSource="{Binding  PartTransactions}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+
+                    <DataGrid  Grid.Row="1"  ItemsSource="{Binding  PartTransactions}">
 
                 </DataGrid>
+                </Grid>
             </TabItem>
         </TabControl>
 

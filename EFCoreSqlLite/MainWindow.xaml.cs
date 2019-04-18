@@ -23,7 +23,7 @@ namespace Mosiac
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private readonly MainViewModel _vm;
         private readonly IPartDetailViewModel _partModel;
@@ -40,7 +40,7 @@ namespace Mosiac
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            await _vm.Load();
+            await _vm.LoadAsync();
             await _partModel.LoadManusList();
             
         }

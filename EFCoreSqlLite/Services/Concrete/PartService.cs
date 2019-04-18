@@ -24,7 +24,7 @@ namespace Mosiac.Services
 
         public void Add(Part obj)
         {
-            // inserts record in the DB via DAL
+            //inserts record in the DB via DAL
         }
 
 
@@ -33,7 +33,13 @@ namespace Mosiac.Services
             return await _ctx.Document.AsNoTracking().Where(p => p.PartID == partID).ToListAsync();
 
         }
+        public void AddPartResources(Document doc)
+        {
+             _ctx.Document.Add(doc);
+            _ctx.SaveChanges();
 
+
+        }
 
         public async Task<IList<Part>> Search(string term)
         {

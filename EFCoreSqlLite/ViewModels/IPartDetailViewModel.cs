@@ -4,13 +4,14 @@ using System.Windows.Input;
 using BadgerData.DTO;
 using Database.DTO;
 using Database.Models;
+using Mosiac.Wrapper;
 using Prism.Commands;
 
 namespace Mosiac.ViewModels
 {
     public interface IPartDetailViewModel
     {
-        Part DetailPart { get; set; }
+        PartWrapper DetailPart { get; set; }
         ObservableCollection<Document> PartResources { get; set; }
         ObservableCollection<PurchaseOrderListDTO> PartOrders { get; set; }
         ObservableCollection<InventoryTransactionsDTO> PartTransactions { get; set; }

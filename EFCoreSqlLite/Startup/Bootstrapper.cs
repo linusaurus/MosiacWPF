@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Prism.Events;
 using Mosiac.Views.Services;
 using Mosiac.Views;
+using Mosiac.Repository;
 
 namespace Mosiac.Startup
 {
@@ -18,6 +19,9 @@ namespace Mosiac.Startup
         public IContainer Bootstrap()
         {
             var builder = new ContainerBuilder();
+
+            builder.RegisterType<Main>().AsSelf();
+            
 
             builder.RegisterType<DatabaseContext>().AsSelf();
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
@@ -31,8 +35,8 @@ namespace Mosiac.Startup
 
             builder.RegisterType<MessageDialogService>().As<IMessageDialogService>();
             builder.RegisterType<AssetService>().As<IAssetService>();
+            builder.RegisterType<PartRepository>().As<IPartRepository>();
             builder.RegisterType<PartService>().As<IPartService>();
-
 
             return builder.Build();
         }

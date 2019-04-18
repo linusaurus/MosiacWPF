@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Database.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Database.Models
 {
@@ -11,16 +12,16 @@ namespace Database.Models
         public Part()
         {
             this.DocumentParts = new HashSet<DocumentParts>();
-            this.UnitOfPurchases = new HashSet<UnitOfPurchase>();
+            
         }
 
         public int PartID { get; set; }
         public string ItemName { get; set; }
+        [Required(ErrorMessage ="A description for the part is required")]
+        [StringLength(240)]
         public string ItemDescription { get; set; }
         public string PartNum { get; set; }
         public int? ManuID { get; set; }
-
-       
 
         public bool? ObsoluteFlag { get; set; }
         public int? PartTypeID { get; set; }

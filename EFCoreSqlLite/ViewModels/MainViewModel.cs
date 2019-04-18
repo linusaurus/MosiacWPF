@@ -17,30 +17,45 @@ namespace Mosiac.ViewModels
         private readonly IAssetService _assetService;
         private readonly IMessageDialogService _messageDialogService;
         private readonly IEventAggregator _eventAggregator;
-   
+        private readonly IPartDetailViewModel _partDetailViewModel;
         private Part _selectedPart;
 
         public IPartService _partService { get; }
         public ObservableCollection<Part> Parts { get; private set; }
 
         public MainViewModel(IAssetService assetService, IPartService partService,
-            IMessageDialogService messageDialogService,IEventAggregator eventAggregator, IPartDetailViewModel partDetailViewModel)
+            IMessageDialogService messageDialogService,IEventAggregator eventAggregator,Func<IPartDetailViewModel> partDetailViewModel)
         {
+           // _eventAggregator.GetEvent<AfterPartSavedEvent>().Subscribe(AfterPartSaved);
+           // _eventAggregator.GetEvent<OpenPartDetailEvent>().Subscribe(OnOpenDetailPart);
+            _messageDialogService = messageDialogService;
+
             Parts = new ObservableCollection<Part>();
             _assetService = assetService;
             _partService = partService;
-            _messageDialogService = messageDialogService;
+            _partDetailViewModel = partDetailViewModel();
+          
             _eventAggregator = eventAggregator;
-            PartDetailModel = partDetailViewModel;
-            _eventAggregator.GetEvent<AfterPartSavedEvent>().Subscribe(AfterPartSaved);
+            PartDetailModel = partDetailViewModel();
+  
         }
 
-        private void AfterPartSaved(AfterPartSavedEventArgs obj)
+        // Load the Datasource here
+        public async Task LoadAsync()
         {
-            var lookupItem = Parts.Single(l => l.PartID == obj.Id);
-            lookupItem.ItemDescription = obj.DisplayMember;
-        }
+            var parts = await _partService.GetAllAsync();
+            Parts.Clear();
+            foreach (var part in parts)
+            {
+                Parts.Add(part);
+            }
+            // Load the lookup list
+            await PartDetailModel.LoadManusList();
+            await PartDetailModel.LoadSuppliersList();
+            await PartDetailModel.LoadUnitsOfMeasureList();
 
+        }
+        // Search Part by Description or PartID
         public async void Search(string term)
         {
             //TODO load partlineitem as viewModels
@@ -51,21 +66,6 @@ namespace Mosiac.ViewModels
                 Parts.Add(part);
             }
         }
-        // Load the Datasource here
-        public async Task Load()
-        {
-            var parts = await _partService.GetAllAsync();
-            Parts.Clear();
-            foreach (var part in parts)
-            {
-                Parts.Add(part);
-            }
-            // Load the Manufacturer CBO List!
-           await PartDetailModel.LoadManusList();
-           await PartDetailModel.LoadSuppliersList();
-           await PartDetailModel.LoadUnitsOfMeasureList();
-           
-        }
 
         public Part SelectedPart
         {
@@ -73,7 +73,7 @@ namespace Mosiac.ViewModels
             set {
                 _selectedPart = value;
                 OnPropertyChanged();
-                if (_selectedPart!=null)
+                if (_selectedPart != null)
                 {
                     _eventAggregator.GetEvent<OpenPartDetailEvent>()
                         .Publish(_selectedPart.PartID);
@@ -81,7 +81,24 @@ namespace Mosiac.ViewModels
             }
         }
 
-        public IPartDetailViewModel PartDetailModel { get; }
+        private async void OnOpenDetailPart(int obj)
+        {
+           // PartDetailModel = _partDetailViewModel();
+          // await PartDetailModel.LoadAsync(obj);
+        }
+
+        private void AfterPartSaved(AfterPartSavedEventArgs obj)
+        {
+            var lookupItem = Parts.Single(l => l.PartID == obj.Id);
+            lookupItem.ItemDescription = obj.DisplayMember;
+        }
+
+       
+      
+
+        
+
+        public IPartDetailViewModel PartDetailModel { get; set; }
 
     }
 }
